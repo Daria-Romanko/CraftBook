@@ -1,0 +1,31 @@
+<div class="relative mx-auto w-full max-w-md bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10">
+  <div class="w-full">
+    <div class="text-center">
+      <h1 class="text-3xl font-semibold text-gray-900">Обновление пароля</h1>
+    </div>
+    <div class="mt-5">
+      <% if @user.errors.any? %>
+        <div class="mb-4">
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li class="text-red-600"><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= form_with url: password_path(params[:token]), method: :put do |form| %>
+        <div class="relative mt-6">
+          <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Enter new password", class: "peer mt-1 w-full border-0 border-b-2 border-gray-300 placeholder:text-transparent focus:border-gray-500 focus:outline-none focus:ring-0"%>
+          <label for="new-password" class="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800">Пароль</label>
+        </div>
+        <div class="relative mt-6">
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repeat new password", class: "peer mt-1 w-full border-0 border-b-2 border-gray-300 placeholder:text-transparent focus:border-gray-500 focus:outline-none focus:ring-0" %>
+          <label for="new-password" class="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800">Еще раз пароль</label>
+        </div>
+        <div class="my-6">
+          <%= form.submit "Сохранить", class: "w-full rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

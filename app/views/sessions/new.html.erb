@@ -1,0 +1,25 @@
+<div
+    class="relative mx-auto w-full max-w-md bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10">
+    <div class="w-full">
+        <div class="text-center">
+            <h1 class="text-3xl font-semibold text-gray-900">Авторизация</h1>
+        </div>
+        <div class="mt-5">
+            <%= form_with url: session_path do |form| %>
+            <div class="relative mt-6">
+                <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Электронная почта", class: "peer mt-1 w-full border-0 border-b-2 border-gray-300 placeholder:text-transparent focus:border-gray-500 focus:outline-none focus:ring-0", value: params[:email_address] %>
+                <label for="email_address" class="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800">Электронная почта</label>
+            </div>
+            <div class="relative mt-6">
+                <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Пароль", class: "peer mt-1 w-full border-0 border-b-2 border-gray-300 placeholder:text-transparent focus:border-gray-500 focus:outline-none focus:ring-0" %>
+                <label for="password" class="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800">Пароль</label>
+            </div>
+            <div class="my-6">
+                <%= form.submit "Войти", class: "w-full rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none" %>
+            </div>
+        <% end %>
+            <p class="text-center text-sm text-gray-500 mt-4">Забыли пароль? <%= link_to "Восстановить пароль", new_password_path, class: "font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none" %></p>
+            <p class="text-center text-sm text-gray-500">Нет аккаунта? <%= link_to "Регистрация", new_registration_path , class: "font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none" %></p>
+        </div>
+    </div>
+</div>
