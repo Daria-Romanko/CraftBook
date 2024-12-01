@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  recire: one
+  ingridient: one
+  quantity: 1
+
+two:
+  recire: two
+  ingridient: two
+  quantity: 1
