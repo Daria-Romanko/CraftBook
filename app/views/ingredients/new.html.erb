@@ -1,0 +1,30 @@
+<h1>Добавить ингредиент</h1>
+
+<%= form_with(model: [@project, @ingredient], local: true) do |form| %>
+  <% if @ingredient.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ingredient.errors.count, "ошибка") %> запрещает сохранить ингредиент:</h2>
+      <ul>
+        <% @ingredient.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Добавить ингредиент" %>
+  </div>
+<% end %>
+
+<%= link_to 'Назад', project_path(@project) %>

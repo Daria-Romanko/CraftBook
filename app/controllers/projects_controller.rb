@@ -8,6 +8,10 @@ class ProjectsController < ApplicationController
   def new
   end
 
+  def edit
+    @project = Project.find(params[:id])
+  end
+
   def create
     if Project.exists?(name: project_params[:name])
       flash[:alert] = "Проект с таким именем уже существует."
@@ -26,14 +30,18 @@ class ProjectsController < ApplicationController
 
   def show
     @project = @user.projects.find(params[:id])
+    @recipes = @project.recipes
+    @ingredients = @project.ingredients
+    @tags = Tag.joins(:recipes).where(recipes: { id: @recipes.pluck(:id) }).distinct
   end
 
   def update
     @project = Project.find(params[:id])
     if @project.update(project_params)
-      # Успешное обновление
+      redirect_to projects_path, notice: "Проект успешно переименован."
     else
-      # Обработка ошибок
+      flash.now[:alert] = "Произошла ошибка."
+      render :new
     end
   end
 
@@ -45,7 +53,7 @@ class ProjectsController < ApplicationController
   private
 
   def set_user
-    @user = Current.user || User.find(session[:user_id]) # или другой способ получения текущего пользователя
+    @user = Current.user || User.find(session[:user_id])
   end
 
   def project_params

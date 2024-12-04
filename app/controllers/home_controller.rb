@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  skip_before_action :require_authentication, only: :index
   before_action :redirect_if_authenticated
   def index
   end

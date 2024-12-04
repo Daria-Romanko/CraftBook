@@ -10,31 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_01_073941) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_01_153525) do
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "project_id"
+    t.index ["project_id"], name: "index_ingredients_on_project_id"
   end
 
-  create_table "ingridients_recipes", force: :cascade do |t|
+  create_table "ingredients_recipes", force: :cascade do |t|
     t.integer "recipe_id", null: false
     t.integer "ingridient_id", null: false
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ingridient_id"], name: "index_ingridients_recipes_on_ingridient_id"
-    t.index ["recipe_id"], name: "index_ingridients_recipes_on_recipe_id"
+    t.index ["ingridient_id"], name: "index_ingredients_recipes_on_ingridient_id"
+    t.index ["recipe_id"], name: "index_ingredients_recipes_on_recipe_id"
   end
 
-  create_table "ingridients_tags", force: :cascade do |t|
+  create_table "ingredients_tags", force: :cascade do |t|
     t.integer "ingridient_id", null: false
     t.integer "tag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ingridient_id"], name: "index_ingridients_tags_on_ingridient_id"
-    t.index ["tag_id"], name: "index_ingridients_tags_on_tag_id"
+    t.index ["ingridient_id"], name: "index_ingredients_tags_on_ingridient_id"
+    t.index ["tag_id"], name: "index_ingredients_tags_on_tag_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -86,10 +88,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_01_073941) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
-  add_foreign_key "ingridients_recipes", "ingridients"
-  add_foreign_key "ingridients_recipes", "recipes"
-  add_foreign_key "ingridients_tags", "ingridients"
-  add_foreign_key "ingridients_tags", "tags"
+  add_foreign_key "ingredients", "projects"
+  add_foreign_key "ingredients_recipes", "ingridients"
+  add_foreign_key "ingredients_recipes", "recipes"
+  add_foreign_key "ingredients_tags", "ingridients"
+  add_foreign_key "ingredients_tags", "tags"
   add_foreign_key "projects", "users"
   add_foreign_key "recipes", "projects"
   add_foreign_key "recipes_tags", "recipes"

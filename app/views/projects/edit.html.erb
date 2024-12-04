@@ -1,0 +1,13 @@
+<div class="flex w-full items-center justify-center ">
+    <div class="mx-auto w-full max-w-[550px] bg-white">
+      <%= form_with(model: @project, url: project_path(@project), method: :patch, local: true) do |form| %>
+        <div class="mb-5">
+          <label for="project_name" class="mb-3 block text-xl font-medium text-[#07074D]">Переименование проекта</label>
+          <%= form.text_field :name, id: 'project_name', value: @project.name, placeholder: 'Новое название проекта', class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
+        </div>
+        <div>
+          <%= form.submit 'Переименовать', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+        </div>
+      <% end %>
+    </div>
+</div>

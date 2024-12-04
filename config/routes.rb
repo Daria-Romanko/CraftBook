@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :projects
-
+  resources :projects do
+    resources :ingredients, only: [ :new, :create ]
+  end
   resource :session
   resources :passwords, param: :token
   resources :registrations, only: [ :new, :create ]
