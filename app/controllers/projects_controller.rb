@@ -12,18 +12,39 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
+  def delete
+    @project = Project.find(params[:id])
+  end
+
   def create
-    if Project.exists?(name: project_params[:name])
-      flash[:alert] = "Проект с таким именем уже существует."
-      redirect_to new_project_path
-    else
-      @project = Project.new(project_params)
-      @project.user = @user
-      if @project.save
-        redirect_to project_path(@project), notice: "Проект успешно создан."
+    @project = Project.new(project_params)
+    @project.user = @user
+
+    respond_to do |format|
+      if Project.exists?(name: project_params[:name])
+        flash.now[:alert] = "Проект с таким именем уже существует."
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }
+        format.html { redirect_to new_project_path, alert: "Проект с таким именем уже существует." }
+      elsif @project.save
+        format.turbo_stream { render turbo_stream: turbo_stream.append("projects", partial: "projects/project", locals: { project: @project }) } # Изменено на append
+        format.html { redirect_to project_path(@project), notice: "Проект успешно создан." }
       else
         flash.now[:alert] = "Произошла ошибка при создании проекта."
-        render :new
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }
+        format.html { render :new }
+      end
+    end
+  end
+  def update
+    @project = Project.find(params[:id])
+    respond_to do |format|
+      if @project.update(project_params)
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_#{@project.id}", partial: "projects/project", locals: { project: @project }) } # Изменено на replace
+        format.html { redirect_to project_path(@project), notice: "Проект успешно переименован." }
+      else
+        flash.now[:alert] = "Произошла ошибка при переименовании проекта."
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }
+        format.html { render :edit }
       end
     end
   end
@@ -35,19 +56,18 @@ class ProjectsController < ApplicationController
     @tags = Tag.joins(:recipes).where(recipes: { id: @recipes.pluck(:id) }).distinct
   end
 
-  def update
-    @project = Project.find(params[:id])
-    if @project.update(project_params)
-      redirect_to projects_path, notice: "Проект успешно переименован."
-    else
-      flash.now[:alert] = "Произошла ошибка."
-      render :new
-    end
-  end
-
   def destroy
     @project = Project.find(params[:id])
-    @project.destroy
+  @project.destroy
+  respond_to do |format|
+    format.turbo_stream do
+      render turbo_stream: [
+        turbo_stream.remove("project_#{@project.id}"),
+        turbo_stream.update("modalBox", { action: "remove" })
+      ]
+    end
+    format.html { redirect_to projects_path, notice: "Проект успешно удален." }
+  end
   end
 
   private

@@ -3,6 +3,11 @@ Rails.application.routes.draw do
 
   resources :projects
   resources :projects do
+    member do
+      get "delete", to: "projects#delete"
+    end
+  end
+  resources :projects do
     resources :ingredients, only: [ :new, :create ]
   end
   resource :session

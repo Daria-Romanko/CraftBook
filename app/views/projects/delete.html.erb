@@ -1,0 +1,10 @@
+<%= render TurboModalComponent.new(title: "Подтверждение удаления") do %>
+  <div class="mx-auto w-full max-w-[550px] bg-white"> 
+    <%= form_with(model: @project, url: project_path(@project), method: :delete, local: true) do |form| %>
+      <p class="mb-5">Вы уверены, что хотите удалить проект "<%= @project.name %>"?</p> 
+      <div class="mt-5"> <!-- Добавлен отступ сверху для кнопки -->
+        <%= form.submit 'Удалить', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
