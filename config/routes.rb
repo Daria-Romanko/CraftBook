@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     end
   end
   resources :projects do
-    resources :ingredients, only: [ :new, :create ]
+    resources :ingredients, only: [ :index, :new, :create ]
+    # resources :recipes, only: [:index, :new, :create]
+    # resources :tags, only: [:index, :new, :create]
   end
   resource :session
   resources :passwords, param: :token

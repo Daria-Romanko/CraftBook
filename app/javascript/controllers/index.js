@@ -4,5 +4,8 @@
 
 import { application } from "./application"
 
+import SectionController from "./section_controller"
+application.register("section", SectionController)
+
 import TurboModalController from "./turbo_modal_controller"
 application.register("turbo-modal", TurboModalController)
