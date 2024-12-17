@@ -1,0 +1,12 @@
+<%= render TurboModalComponent.new(title: "Создание нового рецепта") do %>
+  <div class="mx-auto w-full max-w-[550px] bg-white">
+    <%= form_with(model: [@project, Recipe.new], url: project_recipes_path(@project), remote: true) do |form| %>
+      <div class="mb-5">
+        <%= form.text_field :name, id: 'recipe_name', placeholder: 'Название рецепта', class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
+      </div>
+      <div>
+        <%= form.submit 'Создать', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+      </div>
+    <% end %>
+  </div>
+<% end %> 

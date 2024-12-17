@@ -23,11 +23,12 @@
   </head>
 
   <body>
+      <%= turbo_frame_tag :modal %>
     
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
-      <%= turbo_frame_tag "modal" %>
     </main>
+   
     
   </body>
 </html>

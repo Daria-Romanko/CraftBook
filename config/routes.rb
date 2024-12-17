@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   end
   resources :projects do
     resources :ingredients, only: [ :index, :new, :create ]
-    # resources :recipes, only: [:index, :new, :create]
+    resources :recipes, only: [ :index, :new, :create, :edit, :destroy ]
     # resources :tags, only: [:index, :new, :create]
   end
   resource :session

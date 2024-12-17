@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import RecipeFormController from "./recipe_form_controller"
+application.register("recipe-form", RecipeFormController)
+
 import SectionController from "./section_controller"
 application.register("section", SectionController)
 
