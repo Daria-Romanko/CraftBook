@@ -1,0 +1,55 @@
+<%= render 'shared/navbar' %>
+
+<div class="flex flex-col">
+  <%= render 'recipe_name'%>
+
+  <div class="flex space-x-4"> 
+    <%= form_with(url: add_ingredient_project_recipe_path(@project, @recipe), method: :post, local: true, class: 'w-1/2') do |form| %>
+      <div class="mb-5">
+        <%= form.label :ingredient_id, "Ингредиент", class: 'block text-sm font-medium text-gray-700' %>
+        <%= form.collection_select(:ingredient_id, Ingredient.all, :id, :name, { prompt: "Выберите ингредиент" }, class: 'mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md') %>
+      </div>
+
+      <div class="mb-5">
+        <%= form.label :quantity, "Количество", class: 'block text-sm font-medium text-gray-700' %>
+        <%= form.number_field :quantity, class: 'mt-1 w-24 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md', placeholder: 'Количество' %>
+      </div>
+
+      <div class="mb-5">
+        <%= form.submit "Добавить ингредиент", class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+      </div>
+    <% end %>
+
+    <%= form_with(url: add_tag_project_recipe_path(@project, @recipe), method: :post, local: true, class: 'w-1/2') do |form| %>
+      <div class="mb-5">
+        <%= form.label :tag_id, "Тег", class: 'block text-sm font-medium text-gray-700' %>
+        <%= form.collection_select(:tag_id, Tag.all, :id, :name, { prompt: "Выберите тег" }, class: 'mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md') %>
+      </div>
+
+      <div class="mb-5">
+        <%= form.submit "Добавить тег", class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-5">
+    <h2 class="text-lg font-semibold">Ингредиенты</h2>
+    <ul>
+      <% @recipe.ingredient_recipes.each do |ingredient_recipe| %>
+        <li>
+          <%= ingredient_recipe.ingredient.name %> 
+          (<%= ingredient_recipe.quantity %>)
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="mb-5">
+    <h2 class="text-lg font-semibold">Теги</h2>
+    <ul>
+      <% @recipe.tags.each do |tag| %>
+        <li><%= tag.name %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

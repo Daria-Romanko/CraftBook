@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
         format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }
         format.html { redirect_to new_project_path, alert: "Проект с таким именем уже существует." }
       elsif @project.save
-        format.turbo_stream { render turbo_stream: turbo_stream.append("projects", partial: "projects/project", locals: { project: @project }) } # Изменено на append
+        format.turbo_stream { render turbo_stream: turbo_stream.append("projects", partial: "projects/project", locals: { project: @project }) }
         format.html { redirect_to project_path(@project), notice: "Проект успешно создан." }
       else
         flash.now[:alert] = "Произошла ошибка при создании проекта."
@@ -39,8 +39,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     respond_to do |format|
       if @project.update(project_params)
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_#{@project.id}", partial: "projects/project", locals: { project: @project }) } # Изменено на replace
-        format.html { redirect_to project_path(@project), notice: "Проект успешно переименован." }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("project_#{@project.id}", partial: "projects/project", locals: { project: @project }) }
       else
         flash.now[:alert] = "Произошла ошибка при переименовании проекта."
         format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }

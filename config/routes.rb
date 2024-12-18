@@ -8,8 +8,14 @@ Rails.application.routes.draw do
     end
   end
   resources :projects do
+    resources :recipes do
+      post "add_ingredient", on: :member
+      post "add_tag", on: :member
+    end
+  end
+  resources :projects do
     resources :ingredients, only: [ :index, :new, :create ]
-    resources :recipes, only: [ :index, :new, :create, :edit, :destroy ]
+    resources :recipes, only: [ :index, :new, :create, :show,  :edit, :destroy ]
     # resources :tags, only: [:index, :new, :create]
   end
   resource :session
