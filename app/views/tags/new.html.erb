@@ -1,10 +1,10 @@
-<%= render TurboModalComponent.new(title: "Создание нового ингредиента") do %>
-                <%= form_with(model: Ingredient.new ,url: project_ingredients_path(@project), local: true) do |form| %>
-                <div class="field mb-5">
+<%= render TurboModalComponent.new(title: "Создание тега") do %>   
+<%= form_with(model: Tag.new ,url: project_tags_path(@project), local: true) do |form| %>
+                <div class="mb-5">
                     <%= form.label :name, 'Название', class: 'block text-lg font-medium text-gray-700' %>
-                    <%= form.text_field :name, id: 'ingredient_name', required: true, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
+                    <%= form.text_field :name, id: 'tag_name', placeholder: 'Название тега', required: true, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
                 </div>
-
+                
                 <div class="field mb-5">
                     <%= form.label :description, 'Описание', class: 'block text-lg font-medium text-gray-700' %>
                     <%= form.text_area :description, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
@@ -15,8 +15,9 @@
                     <%= form.file_field :image, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
                 </div>
 
-                <div class="actions">
-                    <%= form.submit "Создать", class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+                <div>
+                    <%= form.submit 'Создать', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
                 </div>
-                <% end %>
-<% end %>
+   
+              <% end %>
+              <% end %>

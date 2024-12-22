@@ -1,8 +1,8 @@
-<%= render TurboModalComponent.new(title: "Создание рецепта") do %>   
-<%= form_with(model: [@project, Recipe.new], url: project_recipes_path(@project), remote: true) do |form| %>
+<%= render TurboModalComponent.new(title: "Изменение тега") do %>   
+ <%= form_with(model: @tag ,url: project_tag_path(@project, @tag), method: :patch, local: true)  do |form| %>
                 <div class="mb-5">
-                  <%= form.label :name, 'Название', class: 'block text-lg font-medium text-gray-700' %>
-                  <%= form.text_field :name, id: 'recipe_name', required: true, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
+                    <%= form.label :name,'Название', class: 'block text-lg font-medium text-gray-700' %>
+                    <%= form.text_field :name, id: 'tag_name', placeholder: 'Название тега', required: true, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
                 </div>
 
                 <div class="field mb-5">
@@ -16,8 +16,7 @@
                 </div>
                 
                 <div>
-                  <%= form.submit 'Создать', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+                    <%= form.submit 'Изменить', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
                 </div>
-              <% end %>
+    <% end %>
 <% end %>
-  

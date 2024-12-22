@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_17_143431) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_21_111555) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -100,6 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_143431) do
     t.integer "tag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "quantity"
     t.index ["recipe_id"], name: "index_recipe_tags_on_recipe_id"
     t.index ["tag_id"], name: "index_recipe_tags_on_tag_id"
   end
@@ -109,6 +110,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_143431) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["project_id"], name: "index_recipes_on_project_id"
   end
 
@@ -135,6 +137,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_143431) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "project_id"
+    t.integer "quantity"
+    t.text "description"
   end
 
   create_table "users", force: :cascade do |t|
@@ -163,4 +168,5 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_17_143431) do
   add_foreign_key "recipes_tags", "recipes"
   add_foreign_key "recipes_tags", "tags"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tags", "projects"
 end

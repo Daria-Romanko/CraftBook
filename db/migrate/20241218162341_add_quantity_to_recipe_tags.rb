@@ -1,0 +1,5 @@
+class AddQuantityToRecipeTags < ActiveRecord::Migration[8.0]
+  def change
+    add_column :recipe_tags, :quantity, :integer
+  end
+end

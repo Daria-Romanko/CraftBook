@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import LinkDeactivationController from "./link_deactivation_controller"
+application.register("link-deactivation", LinkDeactivationController)
+
 import RecipeFormController from "./recipe_form_controller"
 application.register("recipe-form", RecipeFormController)
 

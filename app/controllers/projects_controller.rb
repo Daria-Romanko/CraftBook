@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    @project = Project.new
   end
 
   def edit
@@ -52,7 +53,7 @@ class ProjectsController < ApplicationController
     @project = @user.projects.find(params[:id])
     @recipes = @project.recipes
     @ingredients = @project.ingredients
-    @tags = Tag.joins(:recipes).where(recipes: { id: @recipes.pluck(:id) }).distinct
+    @tags = @project.tags
   end
 
   def destroy

@@ -14,7 +14,7 @@
   <div id="content">
     <div data-section-target="recipe" class="hidden">
       <h3 class="text-xl font-bold">Рецепты</h3>
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-2 xl:gap-x-8">
+      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         <div class="relative bg-white border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 transform transition duration-500 hover:scale-105">
           <%= link_to new_project_recipe_path(@project), data: {turbo_frame: "modal"} , class: "block h-full" do %>
               <div class="p-2 flex justify-center items-center h-full">
@@ -23,14 +23,16 @@
           <% end %>
         </div>
         <% @recipes.each do |recipe| %>
+        <div id="recipe_<%= recipe.id %>">
           <%= render partial: 'recipe_card', locals: { recipe: recipe } %>
+          </div>
         <% end %>
       </div>
-    </div>
+  </div>
 
     <div data-section-target="ingredient" class="hidden">
       <h3 class="text-xl font-bold">Ингредиенты</h3>
-      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <turbo-frame id ="ingredients_section_cards" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         <div class="relative bg-white border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 transform transition duration-500 hover:scale-105">
           <%= link_to new_project_ingredient_path(@project),data: { turbo_frame: 'modal' }, class: "block h-full" do %>
               <div class="p-2 flex justify-center items-center h-full">
@@ -38,26 +40,35 @@
               </div>
           <% end %>
         </div>
+        
         <% @ingredients.each do |ingredient| %>
+        <div id="ingredient_<%=ingredient.id%>">
           <%= render partial: 'ingredient_card', locals: { ingredient: ingredient } %>
+        </div>
         <% end %>
-      </div>
+        
+      </turbo-frame>
     </div>
 
     <div data-section-target="tag" class="hidden">
       <h3 class="text-xl font-bold">Теги</h3>
-      <div class="mt-6 grid grid-cols-6 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-8">
+      <turbo-frame id ="tags_section_cards" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      
         <div class="relative bg-white border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 transform transition duration-500 hover:scale-105">
-          <a href="" class="block h-full">
+          <%= link_to new_project_tag_path(@project), data: { turbo_frame: 'modal' } , class: "block h-full" do %> 
             <div class="p-2 flex justify-center items-center h-full">
               <span class="text-2xl font-bold text-gray-900 dark:text-white">+</span>
             </div>
-          </a>
+          <% end %>
         </div>
+        
         <% @tags.each do |tag| %>
-          <%= render partial: 'tag_card', locals: { tag: tag } %>
+          <div id="tag_<%=tag.id%>">
+            <%= render partial: 'tag_card', locals: { tag: tag } %>
+          </div>
         <% end %>
-      </div>
+        </turbo-frame>
+      
     </div>
   </div>
 </div>
