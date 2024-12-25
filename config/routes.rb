@@ -33,6 +33,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :user, only: [ :show, :destroy ] do
+    member do
+      get "delete", to: "users#delete"
+    end
+  end
   resource :session
   resources :passwords, param: :token
   resources :registrations, only: [ :new, :create ]
