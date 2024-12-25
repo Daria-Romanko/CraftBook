@@ -7,27 +7,37 @@
 
   <div class="flex border rounded-lg p-6 bg-gray-50 mb-10 justify-center flex-wrap">
     <div class="flex space-x-4 flex-wrap flex-grow">
-      <%= form_with(url: add_ingredient_project_recipe_path(@project, @recipe), method: :post, local: true, class: 'flex space-x-4 items-end flex-wrap') do |form| %>
-        <div class="mb-5 w-full md:w-60">
-          <%= form.label :ingredient_id, "Ингредиент", class: 'block text-sm font-medium text-gray-700' %>
-          <%= form.collection_select(:ingredient_id, @project.ingredients.all, :id, :name, { prompt: "Выберите ингредиент" }, class: 'mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md',
-          required: true) %>
-        </div>
-
-        <div class="mb-5 w-full md:w-40">
-          <%= form.label :quantity, "Количество", class: 'block text-sm font-medium text-gray-700' %>
-          <%= form.number_field :quantity,
-            class: 'mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md',
-            value: 1,
-            min: 1,
-            max: 9223372036854775807
-          %>
-        </div>
-
-        <div class="mb-5 w-full lg:w-auto">
-          <%= form.submit "Добавить ингредиент", class: 'hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none w-full lg:w-auto' %>
-        </div>
+     <%= form_with(url: add_ingredient_project_recipe_path(@project, @recipe), method: :post, local: true, class: 'flex space-x-4 items-end flex-wrap') do |form| %>
+  <div class="mb-5 w-full md:w-60">
+    <%= form.label :item_id, "Ингредиент/Рецепт", class: 'block text-sm font-medium text-gray-700' %>
+    <select name="item_id" id="item_id" class="mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" required>
+      <option value="" disabled selected>Выберите ингредиент или рецепт</option>
+      <% (@project.ingredients + @project.recipes).each do |item| %>
+         <% if item.is_a?(Ingredient) %>
+           <option value="<%= item.id %>" data-type="Ingredient">Ингредиент: <%= item.name %></option>
+         <% elsif item.is_a?(Recipe) %>
+           <option value="<%= item.id %>" data-type="Recipe">Рецепт: <%= item.name %></option>
+         <% end %>
       <% end %>
+    </select>
+  </div>
+
+  <div class="mb-5 w-full md:w-40">
+    <%= form.label :quantity, "Количество", class: 'block text-sm font-medium text-gray-700' %>
+    <%= form.number_field :quantity,
+      class: 'mt-1 w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md',
+      value: 1,
+      min: 1,
+      max: 9223372036854775807
+    %>
+  </div>
+
+  <%= hidden_field_tag :item_type, nil, id: :item_type %>
+
+  <div class="mb-5 w-full lg:w-auto">
+    <%= form.submit "Добавить ингредиент/рецепт", class: 'hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none w-full lg:w-auto' %>
+  </div>
+<% end %>
     </div>
 
     <div class="flex space-x-4 flex-wrap flex-grow">
@@ -67,10 +77,11 @@
       <div class="absolute inset-0 top-1/2 mt-1 border-t border-gray-300"></div>
     </div>
 
-      <turbo-frame id="ingredients_list" class="mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <% @recipe.ingredient_recipes.each do |ingredient_recipe| %>
-          <%= render partial: 'ingredient_card', locals: { ingredient: ingredient_recipe.ingredient, quantity: ingredient_recipe.quantity, ingredient_recipe: ingredient_recipe } %>   
-        <% end %>
+        <turbo-frame id="items_list" class="mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+    <% (@recipe.ingredient_recipes + @recipe.recipe_recipes).each do |item_recipe| %>
+      <%= render partial: "item_card", locals: { item_recipe: item_recipe } %>
+    <% end %>
+  </turbo-frame>
       </turbo-frame>
     
   </div>
@@ -91,3 +102,11 @@
 </div>
 
 </div>
+
+<script>
+  document.getElementById('item_id').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    var itemType = selectedOption.getAttribute('data-type');
+    document.getElementById('item_type').value = itemType;
+  });
+</script>

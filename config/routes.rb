@@ -8,23 +8,25 @@ Rails.application.routes.draw do
       get "delete", to: "projects#delete"
     end
 
-    resources :recipes do
+    resources :recipes, only: [ :index, :new, :create, :show,  :edit, :destroy, :update ] do
       member do
       get "delete", to: "recipes#delete"
       post "add_ingredient"
       post "add_tag"
-      delete "remove_ingredient/:ingredient_recipe_id", to: "recipes#remove_ingredient", as: :remove_ingredient
+      delete "remove_ingredient/:id", to: "recipes#remove_ingredient", as: :remove_ingredient
       delete "remove_tag/:recipe_tag_id", to: "recipes#remove_tag", as: :remove_tag
       end
     end
 
-    resources :ingredients do
+    resources :ingredients, only: [ :index, :new, :create, :show,  :edit, :destroy, :update ] do
       member do
-      get "delete", to: "ingredients#delete"
+        get "delete", to: "ingredients#delete"
+        post "add_tag"
+        delete "remove_tag/:ingredient_tag_id", to: "ingredients#remove_tag", as: :remove_tag
       end
     end
 
-    resources :recipes, only: [ :index, :new, :create, :show,  :edit, :destroy ]
+
 
     resources :tags do
       member do

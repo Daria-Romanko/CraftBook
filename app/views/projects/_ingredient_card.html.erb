@@ -9,7 +9,7 @@
     </div>
   </div>
 
-<%= link_to edit_project_ingredient_path(@project, ingredient), data: { turbo_frame: 'modal' }, class: "block h-full" do %>
+<%= link_to project_ingredient_path(@project, ingredient), class: "block h-full" do %>
     <div class="p-2 flex justify-center">
       <div class="flex items-center justify-center w-full h-32 bg-gray-200 rounded-md">
         <% if ingredient.image.attached? %>

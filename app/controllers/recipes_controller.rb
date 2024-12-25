@@ -46,42 +46,56 @@ class RecipesController < ApplicationController
   end
 
   def add_ingredient
-    if params[:ingredient_id].present? && params[:quantity].present?
-      ingredient_id = params[:ingredient_id]
-      quantity = params[:quantity]
+    if params[:item_id].present? && params[:item_type].present? && params[:quantity].present?
+      item_id = params[:item_id]
+    item_type = params[:item_type]
+    quantity = params[:quantity]
 
-      existing_record = @recipe.ingredient_recipes.find_by(ingredient_id: ingredient_id)
+    # Определяем, какой тип объекта мы обрабатываем
+    if item_type == "Ingredient"
+      existing_record = @recipe.ingredient_recipes.find_by(ingredient_id: item_id)
+      item_key = :ingredient
+    elsif item_type == "Recipe"
+      existing_record = @recipe.recipe_recipes.find_by(recipe_item_id: item_id)
+      item_key = :recipe_item
+    end
+
     if existing_record
       if existing_record.quantity.to_i == quantity.to_i
-          respond_to do |format|
-            format.html { redirect_to project_recipe_path(@project, @recipe) }
-          end
-          nil
+        respond_to do |format|
+          format.html { redirect_to project_recipe_path(@project, @recipe) }
+        end
+        nil
       else
-          existing_record.update(quantity: quantity)
-          @ingredient_recipe = existing_record
-          respond_to do |format|
-              format.turbo_stream { render turbo_stream: turbo_stream.replace("ingredient_#{@ingredient_recipe.ingredient.id}", partial: "ingredient_card", locals: { ingredient: @ingredient_recipe.ingredient, quantity: @ingredient_recipe.quantity, ingredient_recipe: @ingredient_recipe }) }
-             format.html { redirect_to project_recipe_path(@project, @recipe), notice: notice_message }
-           end
-           nil
+        existing_record.update(quantity: quantity)
+        @item_recipe = existing_record
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("#{item_key}_#{@item_recipe.send("#{item_key}").id}", partial: "item_card", locals: { item_recipe: @item_recipe }) }
+          format.html { redirect_to project_recipe_path(@project, @recipe), notice: "Обновлено" }
+        end
+        nil
       end
     else
-      @ingredient_recipe = @recipe.ingredient_recipes.create(ingredient_id: ingredient_id, quantity: quantity)
+      if item_type == "Ingredient"
+        @item_recipe = @recipe.ingredient_recipes.create(ingredient_id: item_id, quantity: quantity)
+      elsif item_type == "Recipe"
+        @item_recipe = @recipe.recipe_recipes.create(recipe_item_id: item_id, quantity: quantity)
+      end
+
       respond_to do |format|
         format.turbo_stream {
           render turbo_stream: turbo_stream.append(
-          "ingredients_list",
-          partial: "ingredient_card",
-          locals: { ingredient: @ingredient_recipe.ingredient, quantity: @ingredient_recipe.quantity, ingredient_recipe: @ingredient_recipe })
+            "items_list",
+            partial: "item_card",
+            locals: { item_recipe: @item_recipe }
+          )
         }
-        format.html { redirect_to project_recipe_path(@project, @recipe), notice: notice_message }
+        format.html { redirect_to project_recipe_path(@project, @recipe), notice: success_message }
       end
     end
-
     else
-      flash[:alert] = "Пожалуйста, выберите ингредиент и укажите количество."
-      redirect_to project_recipe_path(@project, @recipe)
+    flash[:alert] = "Пожалуйста, выберите ингредиент/рецепт и укажите количество."
+    redirect_to project_recipe_path(@project, @recipe)
     end
   end
 
@@ -115,7 +129,7 @@ class RecipesController < ApplicationController
           partial: "tag_card",
           locals: { tag: @recipe_tag.tag, quantity: @recipe_tag.quantity, recipe_tag: @recipe_tag })
         }
-        format.html { redirect_to project_recipe_path(@project, @recipe), notice: notice_message }
+        format.html { redirect_to project_recipe_path(@project, @recipe), notice: "Создано" }
       end
     end
     else
@@ -125,13 +139,26 @@ class RecipesController < ApplicationController
   end
 
   def remove_ingredient
-    @ingredient_recipe = IngredientRecipe.find_by(id: params[:ingredient_recipe_id])
-        ingredient_id = @ingredient_recipe.ingredient.id
-        @ingredient_recipe.destroy
-         respond_to do |format|
-           format.turbo_stream { render turbo_stream: turbo_stream.remove("ingredient_#{ingredient_id}") }
-           format.html { redirect_to project_recipe_path(@project, @recipe), notice: "Ингредиент удален" }
-         end
+    @item_recipe = nil
+
+    if params[:ingredient_recipe_id].present?
+      @item_recipe = IngredientRecipe.find_by(id: params[:ingredient_recipe_id])
+    elsif params[:recipe_recipe_id].present?
+      @item_recipe = RecipeRecipe.find_by(id: params[:recipe_recipe_id])
+    end
+
+    if @item_recipe
+      item_id = @item_recipe.is_a?(IngredientRecipe) ? @item_recipe.ingredient.id : @item_recipe.recipe_item.id
+      @item_recipe.destroy
+
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.remove("#{@item_recipe.is_a?(IngredientRecipe) ? "ingredient_#{item_id}" : "recipe_#{item_id}" }") }
+        format.html { redirect_to project_recipe_path(@project, @recipe), notice: "#{@item_recipe.is_a?(IngredientRecipe) ? 'Ингредиент' : 'Рецепт'} удален" }
+      end
+    else
+      flash[:alert] = "Не удалось найти запись."
+      redirect_to project_recipe_path(@project, @recipe)
+    end
   end
 
   def remove_tag
@@ -154,6 +181,11 @@ class RecipesController < ApplicationController
         format.turbo_stream { render turbo_stream: turbo_stream.remove("recipe_#{@recipe.id}") }
         format.html { redirect_to project_path(@project), notice: "Рецепт успешно удален." }
       end
+  end
+
+  def export
+    @project = Project.includes(recipes: [ :tags, ingredient_recipes: :ingredient ], ingredients: :tags).find(params[:id])
+    render json: project_as_json(@project)
   end
 
   private

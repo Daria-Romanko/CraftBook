@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_21_111555) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_25_154725) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -95,6 +95,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_111555) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
+  create_table "recipe_recipes", force: :cascade do |t|
+    t.integer "recipe_id", null: false
+    t.integer "recipe_item_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id"], name: "index_recipe_recipes_on_recipe_id"
+    t.index ["recipe_item_id"], name: "index_recipe_recipes_on_recipe_item_id"
+  end
+
   create_table "recipe_tags", force: :cascade do |t|
     t.integer "recipe_id", null: false
     t.integer "tag_id", null: false
@@ -162,6 +172,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_21_111555) do
   add_foreign_key "ingredients_tags", "ingridients"
   add_foreign_key "ingredients_tags", "tags"
   add_foreign_key "projects", "users"
+  add_foreign_key "recipe_recipes", "recipes"
+  add_foreign_key "recipe_recipes", "recipes", column: "recipe_item_id"
   add_foreign_key "recipe_tags", "recipes"
   add_foreign_key "recipe_tags", "tags"
   add_foreign_key "recipes", "projects"
