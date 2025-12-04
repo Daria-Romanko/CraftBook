@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :projects do
     member do
       get "delete", to: "projects#delete"
+      get "export", to: "projects#export"
     end
 
     resources :recipes, only: [ :index, :new, :create, :show,  :edit, :destroy, :update ] do
