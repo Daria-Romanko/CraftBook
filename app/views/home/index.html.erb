@@ -1,32 +1,52 @@
-<div class="relative flex flex-col items-center max-w-screen-xl px-4 mx-auto md:flex-row sm:px-6 p-8">
-    <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
-        <div class="text-left">
-            <h2
-                class="text-4xl font-extrabold leading-10 tracking-tight text-gray-800 sm:text-5xl sm:leading-none md:text-6xl">
-                CraftBook
-            </h2>
-            <p class="max-w-md mx-auto mt-3 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                 Тут будет описание
-            </p>
-            <div class="mt-5 sm:flex md:mt-8">
-                <div class="rounded-md shadow"><a href= <%= new_registration_path %>
-                        class="flex items-center justify-center w-full px-8 py-3 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue md:py-4 md:text-lg md:px-10">
-                        Зарегистрироваться
-                    </a></div>
-                <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                    <a href= <%= new_session_path %>
-                        class="flex items-center justify-center w-full px-8 py-3 text-base font-medium leading-6 text-blue-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-blue-600 focus:outline-none focus:shadow-outline-blue md:py-4 md:text-lg md:px-10">
-                        Войти
-                    </a>
-                </div>
-            </div>
+<div class="min-h-screen flex flex-col">
+  <main class="flex-1 flex items-center justify-center">
+    <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-20">
+      <div class="flex-1 text-left">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-stone-800">
+          CraftBook
+        </h1>
+
+        <p class="mt-4 text-lg md:text-xl text-stone-600 max-w-lg">
+          Веб-приложение для создания систем крафта для игр.
+          <br>
+          Добавляйте ингредиенты, настраивайте рецепты по тегам  
+          и экспортируйте готовую систему в формате JSON для интеграции  
+          в ваш игровой проект.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-4">
+          <%= link_to new_registration_path, class: "flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-amber-600 rounded-md shadow hover:bg-amber-600 transition" do %>
+            Зарегистрироваться
+          <% end %>
+
+          <%= link_to new_session_path, class: "flex items-center justify-center px-8 py-3 text-base font-semibold text-amber-700 bg-white border border-amber-600 rounded-md shadow hover:bg-amber-50 transition" do %>
+            Войти
+          <% end %>
         </div>
+      </div>
+
+      <div class="flex-1 flex justify-center mt-10 md:mt-0">
+        <%= image_tag "/logo.png", alt: "CraftBook Preview", class: "w-full max-w-md h-auto object-contain" %>
+      </div>
     </div>
-    <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pl-10">
-        <div class="relative w-full p-3 rounded  md:p-8">
-            <div class="rounded-lg bg-white text-black w-full">
-                <img src="https://i.pinimg.com/originals/44/44/4a/44444af5dac5926ff967cb1834339e13.jpg" />
-            </div>
-        </div>
+  </main>
+
+  <footer class="w-full border-t border-gray-200 mt-auto bg-gray-50">
+    <div class="w-full max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between">
+      <p class="text-sm text-gray-500 text-center sm:text-left">
+        © <%= Time.current.year %> CraftBook — проект Daria Romanko.
+      </p>
+
+      <a href="https://github.com/Daria-Romanko/CraftBook"
+         target="_blank"
+         rel="noopener"
+         class="inline-flex items-center mt-3 sm:mt-0 text-sm text-gray-500 hover:text-gray-900 transition">
+        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 0.5C5.37 0.5 0 5.87 0 12.5C0 17.73 3.438 22.1 8.205 23.68C8.805 23.79 9.025 23.43 9.025 23.11C9.025 22.82 9.015 22.13 9.01 21.19C5.672 21.91 4.968 19.52 4.968 19.52C4.422 18.14 3.633 17.77 3.633 17.77C2.546 17.04 3.714 17.06 3.714 17.06C4.922 17.15 5.555 18.31 5.555 18.31C6.626 20.23 8.422 19.7 9.128 19.39C9.236 18.61 9.548 18.11 9.89 17.81C7.212 17.51 4.39 16.44 4.39 11.98C4.39 10.68 4.86 9.64 5.64 8.84C5.514 8.54 5.11 7.26 5.764 5.54C5.764 5.54 6.756 5.22 8.996 6.74C9.936 6.48 10.956 6.35 11.976 6.35C12.996 6.35 14.016 6.48 14.956 6.74C17.196 5.22 18.186 5.54 18.186 5.54C18.84 7.26 18.436 8.54 18.31 8.84C19.09 9.64 19.56 10.68 19.56 11.98C19.56 16.46 16.732 17.5 14.046 17.8C14.456 18.14 14.826 18.84 14.826 19.93C14.826 21.47 14.81 22.71 14.81 23.11C14.81 23.43 15.03 23.8 15.64 23.68C20.407 22.1 23.845 17.73 23.845 12.5C23.845 5.87 18.475 0.5 11.845 0.5H12Z" />
+        </svg>
+        <span>GitHub</span>
+      </a>
     </div>
+  </footer>
+
 </div>
