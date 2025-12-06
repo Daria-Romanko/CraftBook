@@ -26,7 +26,24 @@ class ProjectsController < ApplicationController
         format.turbo_stream { render turbo_stream: turbo_stream.replace("project_form", partial: "projects/form", locals: { project: @project }) }
         format.html { redirect_to new_project_path, alert: "Проект с таким именем уже существует." }
       elsif @project.save
-        format.turbo_stream { render turbo_stream: turbo_stream.append("projects", partial: "projects/project", locals: { project: @project }) }
+        format.turbo_stream do
+          was_empty = @user.projects.count == 1
+
+          streams = [
+            turbo_stream.remove("empty_projects"),
+            turbo_stream.append("projects",
+              partial: "projects/project",
+              locals: { project: @project }),
+            turbo_stream.update("modalBox", { action: "remove" })
+          ]
+
+          if was_empty
+            streams << turbo_stream.update("add_project_button",
+              partial: "projects/add_project_button")
+          end
+
+          render turbo_stream: streams
+        end
         format.html { redirect_to project_path(@project), notice: "Проект успешно создан." }
       else
         flash.now[:alert] = "Произошла ошибка при создании проекта."
@@ -35,6 +52,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
+
   def update
     respond_to do |format|
       if @project.update(project_params)
@@ -54,16 +72,27 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-  @project.destroy
-  respond_to do |format|
-    format.turbo_stream do
-      render turbo_stream: [
-        turbo_stream.remove("project_#{@project.id}"),
-        turbo_stream.update("modalBox", { action: "remove" })
-      ]
+    @project.destroy
+    respond_to do |format|
+      format.turbo_stream do
+        if @user.projects.empty?
+          render turbo_stream: [
+            turbo_stream.remove("project_#{@project.id}"),
+            turbo_stream.update("empty_state_container",
+              partial: "empty_state"),
+            turbo_stream.update("add_project_button",
+              html: ""),
+            turbo_stream.update("modalBox", { action: "remove" })
+          ]
+        else
+          render turbo_stream: [
+            turbo_stream.remove("project_#{@project.id}"),
+            turbo_stream.update("modalBox", { action: "remove" })
+          ]
+        end
+      end
+      format.html { redirect_to projects_path, notice: "Проект успешно удален." }
     end
-    format.html { redirect_to projects_path, notice: "Проект успешно удален." }
-  end
   end
 
   def export

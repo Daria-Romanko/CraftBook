@@ -1,11 +1,11 @@
 <%= render TurboModalComponent.new(title: "Создание нового проекта") do %>
-  <div class="relative mx-auto my-8 w-full max-w-[550px] bg-white rounded-lg shadow-xl">
+  <div class="relative mx-auto w-full max-w-[550px] rounded-lg">
     <%= form_with(model: Project.new, url: projects_path, local: true) do |form| %>
-      <div class="mb-5 p-6">
-        <%= form.text_field :name, id: 'project_name', value: @project&.name, placeholder: 'Новое название проекта', required: true, class: 'w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md' %>
+      <div class="mb-8">
+        <%= form.text_field :name, id: 'project_name', value: @project&.name, placeholder: 'Название проекта', required: true, class: 'w-full rounded-md border border-stone-300 bg-white py-3 px-4 text-base font-medium text-stone-800 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:ring-opacity-50' %>
       </div>
-      <div class="px-6 py-4 bg-gray-50 rounded-b-lg">
-        <%= form.submit 'Создать', class: 'hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none' %>
+      <div>
+        <%= form.submit 'Создать', class: 'hover:bg-amber-500 w-full rounded-md bg-amber-600 py-3 px-8 text-center text-base font-semibold text-white outline-none transition-colors duration-200' %>
       </div>
     <% end %>
   </div>

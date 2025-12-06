@@ -51,7 +51,6 @@ class RecipesController < ApplicationController
     item_type = params[:item_type]
     quantity = params[:quantity]
 
-    # Определяем, какой тип объекта мы обрабатываем
     if item_type == "Ingredient"
       existing_record = @recipe.ingredient_recipes.find_by(ingredient_id: item_id)
       item_key = :ingredient
