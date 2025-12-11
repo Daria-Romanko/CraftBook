@@ -3,12 +3,23 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["recipe", "ingredient", "tag", "button"];
 
+  connect() {
+    this.showInitialSection();
+  }
+
+  showInitialSection() {
+  }
+
   showSection(event) {
     event.preventDefault();
-    const section = event.currentTarget.dataset.section;
+    this.showSectionFromButton(event.currentTarget);
+  }
+
+  showSectionFromButton(button) {
+    const section = button.dataset.section;
     this.hideAllSections();
     this[section + "Target"].classList.remove("hidden");
-    this.setActiveButton(event.currentTarget);
+    this.setActiveButton(button);
   }
 
   hideAllSections() {
@@ -19,15 +30,13 @@ export default class extends Controller {
 
   setActiveButton(activeButton) {
     this.buttonTargets.forEach((button) => {
-      // Удаляем классы подчеркивания и активного состояния у всех кнопок
-      button.classList.remove("text-gray-900", "border-gray-900");
-      button.classList.add("text-gray-500", "border-transparent");
+      button.classList.remove("bg-amber-600", "text-white", "hover:bg-stone-50", "hover:text-stone-900");
+      button.classList.add("text-stone-700");
       button.setAttribute("aria-selected", "false");
-  });
+    });
 
-  // Добавляем классы подчеркивания и активного состояния только для выбранной кнопки
-  activeButton.classList.add("text-gray-900", "border-gray-900");
-  activeButton.classList.remove("text-gray-500", "border-transparent");
-  activeButton.setAttribute("aria-selected", "true");
+    activeButton.classList.add("bg-amber-600", "text-white");
+    activeButton.classList.remove("text-stone-700", "hover:bg-stone-50", "hover:text-stone-900");
+    activeButton.setAttribute("aria-selected", "true");
   }
 }
